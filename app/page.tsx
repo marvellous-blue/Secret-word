@@ -216,67 +216,52 @@ export default function Home() {
   const progressPercent = Math.round((round / ROUNDS) * 100);
   const L = theme === "light";
 
-  const card = `rounded-3xl border p-6 shadow-xl ${L ? "bg-white border-[#4D55CC]/15" : "bg-[#17123D] border-[#B5A8D5]/15"}`;
-  const chip = `rounded-2xl border p-4 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}`;
-  const muted = L ? "text-[#4A4370]" : "text-[#B5A8D5]";
-  const gradText = "bg-[linear-gradient(135deg,#211684_0%,#4D55CC_50%,#7A73D1_100%)] bg-clip-text text-transparent";
-  const btnMain =
-    "min-h-[52px] rounded-2xl bg-[linear-gradient(135deg,#211684_0%,#4D55CC_50%,#7A73D1_100%)] text-[15px] font-semibold text-white shadow-[0_8px_24px_-4px_rgba(77,85,204,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-4px_rgba(77,85,204,0.55)] active:translate-y-0";
+  const cx = (...classes: (string | false | undefined)[]) => classes.filter(Boolean).join(" ");
 
   return (
-    <div className={`relative min-h-screen overflow-x-hidden transition-colors duration-300 ${L ? "bg-[#F8F7FF] text-[#211684]" : "bg-[#100B2E] text-[#F7F5FF]"}`}>
-      <div
-        className="pointer-events-none fixed inset-0 z-0 blur-[60px]"
-        style={{ backgroundImage: "radial-gradient(circle at 15% 10%, rgba(122,115,209,0.28), transparent 40%), radial-gradient(circle at 85% 85%, rgba(33,22,132,0.25), transparent 40%)" }}
-      />
+    <div className={cx("page", L && "light")}>
+      <div className="glow" />
 
-      <nav className={`sticky top-0 z-[5] flex items-center justify-between border-b px-6 py-4 ${L ? "bg-[#F8F7FF] border-[#4D55CC]/15" : "bg-[#100B2E] border-[#B5A8D5]/15"}`}>
-        <div className="flex items-center gap-3 font-bold text-[17px] justify-center">
-          <Image src="/images/logo.png" alt="app logo" width={22} height={22} />
+      <nav className="navbar">
+        <div className="nav-brand">
+          <Image src="/images/logo.png" alt="app logo" width={40} height={40} />
           <span>Secret Word</span>
         </div>
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className={`flex h-10 w-10 items-center justify-center rounded-full border transition-transform duration-200 hover:rotate-[20deg] ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}`}
-        >
-          <Image src={L ? "/images/moon-icon.png" : "/images/sun-icon.png"} alt="theme toggle icon" width={18} height={18} />
+        <button onClick={toggleTheme} aria-label="Toggle theme" className="theme-btn">
+          <Image src={L ? "/images/moon-icon.png" : "/images/sun-icon.png"} alt="theme toggle icon" width={100} height={100} />
         </button>
       </nav>
 
-      <main className="relative z-[1] mx-auto max-w-[460px] px-5 pb-16 pt-8 md:max-w-[500px]">
+      <main className="main">
         {page === "welcome" && (
-          <section className={`${card} text-center`}>
-            <Image src="/images/crystal-ball-icon.png" alt="crystal ball icon" width={76} height={76} className="mx-auto mb-5" />
-            <h1 className={`mb-3 text-[30px] font-extrabold leading-tight md:text-[34px] ${gradText}`}>Secret Word</h1>
-            <p className={`mb-6 text-sm leading-relaxed ${muted}`}>Think you can crack it? Guess the mystery word using sneaky clues!</p>
-            <div className="mb-6 flex gap-3">
-              <div className={`${chip} flex flex-1 flex-col items-center gap-1`}>
-                <span className="text-xl font-bold">{progress.best}</span>
-                <small className={muted}>High Score</small>
+          <section className="card center">
+            <Image src="/images/logo.png" alt="crystal ball icon" width={76} height={76} style={{ display: "block", margin: "0 auto 20px" }} />
+            <h1 className="heading grad-text">Secret Word</h1>
+            <p className="text-muted muted">Think you can crack it? Guess the mystery word using sneaky clues!</p>
+            <div className="stat-row">
+              <div className="chip">
+                <span className="stat-value">{progress.best}</span>
+                <small className="muted">High Score</small>
               </div>
-              <div className={`${chip} flex flex-1 flex-col items-center gap-1`}>
-                <span className="text-xl font-bold">{progress.done.length}/{WORD_BANK.length}</span>
-                <small className={muted}>Levels Beaten</small>
+              <div className="chip">
+                <span className="stat-value">{progress.done.length}/{WORD_BANK.length}</span>
+                <small className="muted">Levels Beaten</small>
               </div>
             </div>
-            <button onClick={goToLevels} className={`w-full py-4 ${btnMain}`}>Let&apos;s Play!</button>
+            <button onClick={goToLevels} className="btn-main" style={{ width: "100%", padding: "16px" }}>Let&apos;s Play!</button>
           </section>
         )}
 
         {page === "levels" && (
-          <section className={card}>
-            <div className="mb-5 flex items-center justify-between">
-              <button
-                onClick={goHome}
-                className={`flex h-10 w-10 items-center justify-center rounded-xl border transition-transform duration-200 hover:-translate-x-0.5 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}`}
-              >
+          <section className="card">
+            <div className="top-row">
+              <button onClick={goHome} className="icon-btn">
                 <Image src="/images/back-arrow.svg" alt="back arrow icon" width={16} height={16} />
               </button>
-              <h2 className="text-[19px] font-bold">Pick Your Challenge</h2>
-              <span className="w-10" />
+              <h2 className="heading-sm">Pick Your Challenge</h2>
+              <span className="hold" />
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="level-list">
               {WORD_BANK.map((level, index) => {
                 const unlocked = index < progress.unlocked;
                 const done = progress.done.includes(index);
@@ -284,16 +269,16 @@ export default function Home() {
                   <div
                     key={level.name}
                     onClick={() => unlocked && startLevel(index)}
-                    className={`flex items-center gap-4 rounded-2xl border p-4 transition-all duration-200 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"} ${!unlocked ? "cursor-not-allowed opacity-45" : "cursor-pointer hover:translate-x-1 hover:shadow-md"} ${done ? "border-[#4D55CC]" : ""}`}
+                    className={cx("level-item", !unlocked && "locked", done && "done")}
                   >
-                    <div className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl font-extrabold text-[17px] text-white ${unlocked ? "bg-[linear-gradient(135deg,#211684_0%,#4D55CC_50%,#7A73D1_100%)]" : L ? "bg-white" : "bg-[#17123D]"}`}>
-                      {unlocked ? index + 1 : <Image src="/images/lock-icon.png" alt="locked level icon" width={18} height={18} />}
+                    <div className={cx("level-num", !unlocked && "locked-bg")}>
+                      {unlocked ? index + 1 : <Image src="/images/lock-icon.png" alt="locked level icon" width={120} height={120} />}
                     </div>
-                    <div className="flex-1 text-left">
-                      <strong className="block text-[15px]">{level.name}</strong>
-                      <span className={`text-xs ${muted}`}>5 words</span>
+                    <div className="level-info">
+                      <strong>{level.name}</strong>
+                      <span className="muted">5 words</span>
                     </div>
-                    <span className={`rounded-full px-3 py-1.5 text-[10px] font-bold ${done ? "bg-[#4D55CC]/15 text-[#4D55CC]" : unlocked ? "bg-[#7A73D1]/15 text-[#7A73D1]" : `bg-[#B5A8D5]/15 ${muted}`}`}>
+                    <span className={cx("tag", done ? "tag-done" : unlocked ? "tag-play" : "tag-locked", !done && !unlocked && "muted")}>
                       {done ? "Beaten" : unlocked ? "Play" : "Locked"}
                     </span>
                   </div>
@@ -304,58 +289,55 @@ export default function Home() {
         )}
 
         {page === "game" && currentWord && (
-          <section className={card}>
-            <div className="mb-5 flex items-center justify-between">
-              <button
-                onClick={goToLevels}
-                className={`flex h-10 w-10 items-center justify-center rounded-xl border transition-transform duration-200 hover:-translate-x-0.5 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}`}
-              >
+          <section className="card">
+            <div className="top-row">
+              <button onClick={goToLevels} className="icon-btn">
                 <Image src="/images/back-arrow.svg" alt="back arrow icon" width={16} height={16} />
               </button>
-              <h2 className="text-[19px] font-bold">Level {currentLevel + 1}: {WORD_BANK[currentLevel].name}</h2>
-              <div className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}`}>
-                <Image src="/images/star-icon.png" alt="star score icon" width={16} height={16} />
+              <h2 className="heading-sm">Level {currentLevel + 1}: {WORD_BANK[currentLevel].name}</h2>
+              <div className="score-box">
+                <Image src="/images/star-icon.png" alt="star score icon" width={40} height={40} />
                 <span>{score}</span>
               </div>
             </div>
 
-            <div className={`mb-2 flex justify-between text-xs ${muted}`}>
+            <div className="progress-info muted">
               <span>Word {round + 1} of {ROUNDS}</span>
               <span>{progressPercent}%</span>
             </div>
-            <div className={`mb-5 h-2 overflow-hidden rounded-full ${L ? "bg-[#EFEDFA]" : "bg-[#21184D]"}`}>
-              <div className="h-full rounded-full bg-[linear-gradient(90deg,#211684_0%,#7A73D1_100%)] transition-[width] duration-300" style={{ width: `${progressPercent}%` }} />
+            <div className="progress-track">
+              <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
             </div>
 
-            <div className={`mb-5 flex items-center gap-3 text-[13px] ${muted}`}>
+            <div className="attempts-row muted">
               <span>Tries Left</span>
-              <div className="flex gap-2">
+              <div className="dots">
                 {Array.from({ length: MAX_ATTEMPTS }).map((_, i) => (
-                  <div key={i} className={`h-3 w-3 rounded-full ${i >= attempts ? `border ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15" : "bg-[#21184D] border-[#B5A8D5]/15"}` : "bg-[linear-gradient(90deg,#211684_0%,#7A73D1_100%)]"}`} />
+                  <div key={i} className={cx("dot", i >= attempts && "used")} />
                 ))}
               </div>
             </div>
 
-            <div className={`mb-6 rounded-2xl border-l-4 border-[#7A73D1] p-4 ${L ? "bg-[#EFEDFA]" : "bg-[#21184D]"}`}>
-              <div className="flex items-start gap-3 text-sm">
-                <Image src="/images/lightbulb-icon.png" alt="lightbulb hint icon" width={20} height={20} className="mt-0.5 flex-shrink-0" />
+            <div className="hint-box">
+              <div className="hint-line">
+                <Image src="/images/lightbulb-icon.png" alt="lightbulb hint icon" width={50} height={50} style={{ marginTop: "2px", flexShrink: 0 }} />
                 <span>{currentWord.hint1}</span>
               </div>
               {showHint2 && (
-                <div className={`mt-3 flex items-start gap-3 border-t border-dashed pt-3 text-sm ${L ? "border-[#4D55CC]/15" : "border-[#B5A8D5]/15"}`}>
-                  <Image src="/images/lightbulb-icon.png" alt="lightbulb hint icon" width={20} height={20} className="mt-0.5 flex-shrink-0" />
+                <div className="hint-line">
+                  <Image src="/images/lightbulb-icon.png" alt="lightbulb hint icon" width={50} height={50} style={{ marginTop: "2px", flexShrink: 0 }} />
                   <span>{currentWord.hint2}</span>
                 </div>
               )}
             </div>
 
-            <div className="mb-6 flex flex-wrap justify-center gap-2">
+            <div className="word-display">
               {currentWord.word.split("").map((_, i) => (
-                <div key={i} className="flex h-10 w-8 items-center justify-center border-b-[3px] border-[#7A73D1] text-lg font-bold md:h-11 md:w-9 md:text-xl" />
+                <div key={i} className="letter-box" />
               ))}
             </div>
 
-            <form onSubmit={handleGuess} className="mb-3 flex gap-3">
+            <form onSubmit={handleGuess} className="guess-form">
               <input
                 type="text"
                 placeholder="Take a guess..."
@@ -363,51 +345,51 @@ export default function Home() {
                 onChange={(e) => setGuess(e.target.value)}
                 maxLength={20}
                 autoComplete="off"
-                className={`min-h-[52px] flex-1 rounded-2xl border-[1.5px] px-4 text-[15px] transition-shadow duration-200 focus:border-[#7A73D1] focus:outline-none focus:ring-[3px] focus:ring-[#7A73D1]/15 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15 text-[#211684]" : "bg-[#21184D] border-[#B5A8D5]/15 text-[#F7F5FF]"}`}
+                className="guess-input"
               />
-              <button type="submit" className={`px-6 ${btnMain}`}>Guess!</button>
+              <button type="submit" className="btn-main guess-btn">Guess!</button>
             </form>
 
-            <p className={`min-h-[18px] text-center text-[13px] font-semibold ${feedbackType === "success" ? "text-[#4D55CC]" : feedbackType === "error" ? "text-[#DC2626]" : ""}`}>{feedback}</p>
+            <p className={cx("feedback", feedbackType)}>{feedback}</p>
           </section>
         )}
 
         {page === "correct" && currentWord && (
-          <section className={`${card} text-center`}>
-            <Image src="/images/success-check-icon.png" alt="green success checkmark icon" width={80} height={80} className="mx-auto mb-5" />
-            <h2 className="text-[19px] font-bold text-[#4D55CC]">Boom! Got It!</h2>
-            <p className={`mb-6 mt-2 text-sm leading-relaxed ${muted}`}>The word was <strong>{currentWord.word}</strong></p>
-            <div className={`mb-6 text-[22px] font-extrabold ${gradText}`}>+10 points</div>
-            <button onClick={nextRound} className={`w-full py-4 ${btnMain}`}>Next Word</button>
+          <section className="card center">
+            <Image src="/images/success-check-icon.png" alt="green success checkmark icon" width={100} height={100} style={{ display: "block", margin: "0 auto 20px" }} />
+            <h2 className="heading-sm" style={{ color: "var(--good)" }}>Boom! Got It!</h2>
+            <p className="text-muted muted mt2">The word was <strong>{currentWord.word}</strong></p>
+            <div className="points grad-text">+10 points</div>
+            <button onClick={nextRound} className="btn-main" style={{ width: "100%", padding: "16px" }}>Next Word</button>
           </section>
         )}
 
         {page === "wrong" && currentWord && (
-          <section className={`${card} text-center`}>
-            <Image src="/images/error-cross-icon.png" alt="red error cross icon" width={80} height={80} className="mx-auto mb-5" />
-            <h2 className="text-[19px] font-bold text-[#DC2626]">So Close!</h2>
-            <p className={`mb-6 mt-2 text-sm leading-relaxed ${muted}`}>The word was <strong>{currentWord.word}</strong></p>
-            <button onClick={nextRound} className={`w-full py-4 ${btnMain}`}>Next Word</button>
+          <section className="card center">
+            <Image src="/images/error-cross-icon.png" alt="red error cross icon" width={100} height={100} style={{ display: "block", margin: "0 auto 20px" }} />
+            <h2 className="heading-sm" style={{ color: "var(--bad)" }}>So Close!</h2>
+            <p className="text-muted muted mt2">The word was <strong>{currentWord.word}</strong></p>
+            <button onClick={nextRound} className="btn-main" style={{ width: "100%", padding: "16px" }}>Next Word</button>
           </section>
         )}
 
         {page === "complete" && (
-          <section className={`${card} text-center`}>
-            <Image src="/images/trophy-icon.png" alt="gold trophy icon" width={80} height={80} className="mx-auto mb-5" />
-            <h2 className="text-[19px] font-bold">Level Crushed!</h2>
-            <div className="mb-6 mt-5 flex gap-3">
-              <div className={`${chip} flex flex-1 flex-col items-center gap-1`}>
-                <span className="text-xl font-bold">{score}</span>
-                <small className={muted}>Score</small>
+          <section className="card center">
+            <Image src="/images/trophy-icon.png" alt="gold trophy icon" width={120} height={120} style={{ display: "block", margin: "0 auto 20px" }} />
+            <h2 className="heading-sm">Level Crushed!</h2>
+            <div className="stat-row mt5">
+              <div className="chip">
+                <span className="stat-value">{score}</span>
+                <small className="muted">Score</small>
               </div>
-              <div className={`${chip} flex flex-1 flex-col items-center gap-1`}>
-                <span className="text-xl font-bold">{correct}/{ROUNDS}</span>
-                <small className={muted}>Correct</small>
+              <div className="chip">
+                <span className="stat-value">{correct}/{ROUNDS}</span>
+                <small className="muted">Correct</small>
               </div>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <button onClick={() => startLevel(currentLevel)} className={`min-h-[52px] flex-1 rounded-2xl border py-4 text-[15px] font-semibold transition-colors duration-200 hover:-translate-y-0.5 ${L ? "bg-[#EFEDFA] border-[#4D55CC]/15 text-[#211684]" : "bg-[#21184D] border-[#B5A8D5]/15 text-[#F7F5FF]"}`}>Play Again</button>
-              <button onClick={goToLevels} className={`flex-1 py-4 ${btnMain}`}>More Levels</button>
+            <div className="btn-group">
+              <button onClick={() => startLevel(currentLevel)} className="btn-alt">Play Again</button>
+              <button onClick={goToLevels} className="btn-main" style={{ flex: 1, padding: "16px" }}>More Levels</button>
             </div>
           </section>
         )}
